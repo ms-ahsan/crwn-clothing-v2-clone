@@ -15,6 +15,8 @@ import {
   doc,
   getDoc,
   setDoc,
+  collection,
+  writeBatch,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -41,6 +43,8 @@ export const signInWithGoogleRedirect = () =>
   signInWithRedirect(auth, goggleProvider);
 
 export const db = getFirestore();
+
+// method to upload categories data to firestore collection
 
 export const createUserDocumentFromAuth = async (
   userAuth,
