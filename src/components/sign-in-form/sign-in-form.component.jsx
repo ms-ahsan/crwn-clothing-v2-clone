@@ -13,8 +13,8 @@ import {
 import './sign-in-form.styles.scss';
 
 const defaultFormFields = {
-  email: '',
-  password: '',
+  email: 'mrchild1006@gmail.com',
+  password: '12345678',
 };
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
