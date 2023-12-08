@@ -5,6 +5,8 @@ import storage from 'redux-persist/lib/storage';
 import logger from 'redux-logger';
 import { rootReducer } from './root-reducer';
 
+import thunk from 'redux-thunk';
+
 //middleware
 
 const persistConfig = {
@@ -17,6 +19,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const middleware = [
   process.env.NODE_ENV !== 'production' && logger,
+  thunk,
 ].filter(Boolean);
 
 const composeEnhancer =
