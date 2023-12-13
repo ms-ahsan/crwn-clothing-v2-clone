@@ -33,23 +33,24 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-const goggleProvider = new GoogleAuthProvider();
-goggleProvider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
 
 export const auth = getAuth();
 export const signInWithGooglePopup = () =>
-  signInWithPopup(auth, goggleProvider);
+  signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () =>
-  signInWithRedirect(auth, goggleProvider);
+  signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();
 
-// method to upload categories data to firestore collection
 export const addCollectionAndDocuments = async (
   collectionKey,
-  objectsToAdd
+  objectsToAdd,
+  field
 ) => {
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
@@ -68,7 +69,6 @@ export const getCategoriesAndDocuments = async () => {
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
-  console.log(querySnapshot);
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
 
@@ -78,14 +78,10 @@ export const createUserDocumentFromAuth = async (
 ) => {
   if (!userAuth) return;
 
-  // Get data from google auth
   const userDocRef = doc(db, 'users', userAuth.uid);
 
-  // Get user data
   const userSnapshot = await getDoc(userDocRef);
 
-  // if user data does not exist
-  // create / set the document with the data from userAuth in my collection
   if (!userSnapshot.exists()) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
@@ -98,13 +94,11 @@ export const createUserDocumentFromAuth = async (
         ...additionalInformation,
       });
     } catch (error) {
-      console.log('error creating user', error.message);
+      console.log('error creating the user', error.message);
     }
   }
 
-  // if user data exist
-  //return userDocRf
-  return userDocRef;
+  return userSnapshot;
 };
 
 export const createAuthUserWithEmailAndPassword = async (
